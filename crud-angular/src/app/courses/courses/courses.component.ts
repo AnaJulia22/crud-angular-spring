@@ -35,7 +35,4 @@ export class CoursesComponent {
       });
     }
 
-    onAdd() {
-      this.router.navigate(['courses/new'])
-    }
 }
