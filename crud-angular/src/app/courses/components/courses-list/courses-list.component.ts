@@ -1,5 +1,5 @@
-import { Component, Input } from '@angular/core';
-import { Course } from '../model/course';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Course } from '../../model/course';
 
 @Component({
   selector: 'app-courses-list',
@@ -9,8 +9,14 @@ import { Course } from '../model/course';
 export class CoursesListComponent {
 
   @Input() courses: Course[] = [];
+  @Output() add = new EventEmitter(false);
 
   readonly displayedColumns = ['name', 'category', 'actions'];
 
   constructor() {}
+
+  onAdd() {
+    this.add.emit(true);
+  }
 }
+
