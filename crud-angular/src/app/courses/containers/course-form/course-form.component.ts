@@ -6,6 +6,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Course } from '../../model/course';
 import { CoursesService } from '../../services/courses.service';
 import { Lesson } from '../../model/lesson';
+import { FormUtilsService } from 'src/app/shared/form-utils.service';
 
 @Component({
   selector: 'app-course-form',
@@ -21,7 +22,8 @@ export class CourseFormComponent {
     private service: CoursesService,
     private _snackBar: MatSnackBar,
     private location: Location,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    public formUtils: FormUtilsService
     ) {
       const course: Course = this.route.snapshot.data['course'];
 
@@ -34,8 +36,6 @@ export class CourseFormComponent {
         category: [course.category, [Validators.required]],
         lessons: this.formBuilder.array(this.retrieveLesson(course), Validators.required)
       });
-      console.log(this.form)
-      console.log(this.form.value)
     };
 
   private retrieveLesson(course: Course) {
@@ -83,7 +83,7 @@ export class CourseFormComponent {
         error: error => this.onError()
       });
     } else {
-      alert('Form inválido');
+      this.formUtils.validateAllFormField(this.form);
     }
   }
 
@@ -106,29 +106,4 @@ export class CourseFormComponent {
   private onError() {
     this._snackBar.open("Erro ao salvar curso","",{duration:5000});
   }
-
-  getErrorMessage(fieldName: string) {
-    const field = this.form.get(fieldName);
-    if (field?.hasError('required')) {
-      return "Campo obrigatório";
-    }
-
-    if (field?.hasError('minlength')) {
-      const requiredLength: number = field.errors ? field.errors['minlength']['requiredLength'] : 5;
-      return `Tamanho mínimo precisa ser de ${requiredLength} caracteres`;
-    }
-
-    if (field?.hasError('maxlength')) {
-      const requiredLength: number = field.errors ? field.errors['maxlength']['requiredLength'] : 100;
-      return `Tamanho maxímo precisa ser de ${requiredLength} caracteres`;
-    }
-
-    return "Campo inválido";
-  }
-
-  ifFormArrayRequired(){
-    const lessons = this.form.get('lessons') as UntypedFormArray;
-    return !lessons.valid && lessons.hasError('required') && lessons.touched;
-  }
-
 }
