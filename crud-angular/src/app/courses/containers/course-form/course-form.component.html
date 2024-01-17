@@ -26,6 +26,45 @@
           getErrorMessage('category')}}
         </mat-error>
       </mat-form-field>
+
+      <mat-toolbar>
+          <span>Aulas</span>
+          <button mat-icon-button color="accent" (click)="addNewLesson()">
+            <mat-icon aria-label="Adicionar uma nova aula">add</mat-icon>
+          </button>
+      </mat-toolbar>
+
+      <mat-error *ngIf="ifFormArrayRequired()" class="form-array-error">
+        Adicione pelo menos uma aula
+      </mat-error>
+
+      <table style="width: 100%" formArrayName="lessons"
+      *ngFor="let lesson of getLessonFormArray(); let i = index">
+        <tr [formGroupName]="i">
+          <td style="width: 65%">
+            <mat-form-field class="full-width" hintLabel="Max 100 characters">
+              <mat-label>Nome da aula</mat-label>
+              <input matInput #input formControlName="name">
+              <mat-error *ngIf="getLessonFormArray()[i].get('name')?.invalid">
+              Campo inválido
+              </mat-error>
+            </mat-form-field>
+          </td>
+          <td style="width: 30%">
+            <mat-form-field class="full-width" hintLabel="Max 100 characters">
+              <mat-label>URL</mat-label>
+              <span matPrefix>https://youtu.be/</span>
+              <input matInput #input formControlName="youtubeUrl">
+            </mat-form-field>
+          </td>
+          <td>
+            <button mat-icon-button color="warn" (click)="removeLesson(i)">
+              <mat-icon aria-label="Remover a aula">delete</mat-icon>
+            </button>
+          </td>
+        </tr>
+      </table>
+
     </form>
   </mat-card-content>
 
