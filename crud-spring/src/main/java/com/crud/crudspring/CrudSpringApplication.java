@@ -26,7 +26,7 @@ public class CrudSpringApplication {
 
 				Course c = new Course();
 
-				c.setName("Angular com Spring" + 1);
+				c.setName("Angular com Spring " + i);
 				c.setCategory(Category.FRONT_END);
 
 				Lesson l = new Lesson();
